@@ -12,16 +12,40 @@ $(document).ready(function () {
         const button = $(event.relatedTarget) // Button that triggered the modal
         const taskID = button.data('source') // Extract info from data-* attributes
         const content = button.data('content') // Extract info from data-* attributes
-
+        console.log(button)
         const modal = $(this)
             modal.find('.modal-title').text('Edit Task ' + taskID)
             $('#task-form-display').attr('taskID', taskID)
         if (content) {
             modal.find('.form-control').val(content);
+            
         } else {
             modal.find('.form-control').val('');
         }
     })
+
+    $('#edit-task-btn').click(function () {
+        const tID = $('#task-form-display').attr('taskID');
+        console.log($('#task-modal').find('.form-control').val())
+        $.ajax({
+            type:'PUT',
+            url:'/edit-task/' + tID,
+            contentType: 'application/json;charset=UTF-8',
+            data: JSON.stringify({
+                        'description': $('#task-modal').find('.form-control').val(),
+                        'id': tID
+                    }),
+                    success: function (res) {
+                        console.log(res.response)
+                        location.reload();
+                    },
+                    error: function () {
+                        console.log('Error');
+                    }
+        })
+       
+    });
+
 
     $('#submit-task').click(function () {
         const tID = $('#task-form-display').attr('taskID');
@@ -90,7 +114,11 @@ $(document).ready(function () {
         let new_state;
 
         if (state.text() === "Todo") {
-            new_state = "In Progress"
+            new_state = "In Pr"
+        }
+        if (state.text() === "In Progress") {
+            console.log('asdggggggggggggggggggggggggggggg')
+            new_state = "Completed"
         }
        
         console.log(new_state)

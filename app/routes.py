@@ -21,11 +21,29 @@ def update_status(task_id):
     """ recieved post requests for entry updates """
 
     data = request.get_json()
-
+    print(data)
     try:
         if "status" in data:
             db_helper.update_status_entry(task_id, data["status"])
             result = {'success': True, 'response': 'Status Updated'}
+        else:
+            result = {'success': True, 'response': 'Nothing Updated'}
+    except:
+        result = {'success': False, 'response': 'Something went wrong'}
+
+    return jsonify(result)
+
+@app.route("/edit-task/<int:task_id>", methods=['PUT'])
+def update_task(task_id):
+    """ recieved post requests for entry updates """
+
+    data = request.get_json()
+    print('asdgasdgsdfgfdsg')
+
+    try:
+        if "description" in data:
+            db_helper.update_task_entry(task_id, data["description"])
+            result = {'success': True, 'response': 'Task Updated'}
         else:
             result = {'success': True, 'response': 'Nothing Updated'}
     except:
